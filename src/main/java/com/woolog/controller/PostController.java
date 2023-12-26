@@ -1,8 +1,11 @@
 package com.woolog.controller;
 
 import com.woolog.request.PostCreate;
+import com.woolog.service.PostService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class PostController {
     // SSR -> jsp, thymeleaf, mustache, freemarker
     //     ->   html rendering
@@ -20,6 +24,11 @@ public class PostController {
     //      vue -> vue+SSR = nuxt
     //      react -> react+SSR = next
     //      javascript + <-> API (JSON)
+
+
+
+    private final PostService postService;
+
 
     @GetMapping("/posts")
     public String get() {
@@ -33,22 +42,26 @@ public class PostController {
     //public String post(@RequestParam String title, @RequestParam String content) {
     //public String post(@RequestParam Map<String, String> params) {
 //    public String post(@ModelAttribute PostCreate params) {
-    public Map<String,String> post(@RequestBody @Valid PostCreate params, BindingResult result) {
-        log.info("params={}", params.toString());
-
-        if (result.hasErrors()) {
-            List<FieldError> fieldErrors = result.getFieldErrors();
-            FieldError firstFieldError = fieldErrors.get(0);
-            String fieldName = firstFieldError.getField();
-            String errorMessage = firstFieldError.getDefaultMessage();
-
-            Map<String, String> error = new HashMap<>();
-            error.put(fieldName, errorMessage);
-
-            return error;
-
-        }
+    public Map<String,String> post(@RequestBody @Valid PostCreate request) {
+        postService.write(request);
         return Map.of();
+
+//        log.info("params={}", params.toString());
+        /* 매번 메서드마다 값을 검증해야 한다
+        * 응답값 HashMap -> 응답클래스를 만들어주는 게 낫다
+        * 여러 에러처리가 어렵다
+        * 세번 이상의 반복 작업은 피해야 한다*/
+//        if (result.hasErrors()) {
+//            List<FieldError> fieldErrors = result.getFieldErrors();
+//            FieldError firstFieldError = fieldErrors.get(0);
+//            String fieldName = firstFieldError.getField();
+//            String errorMessage = firstFieldError.getDefaultMessage();
+//
+//            Map<String, String> error = new HashMap<>();
+//            error.put(fieldName, errorMessage);
+//            return error;
+//        }
+//        return Map.of();
 
         // 데이터를 검증하는 이유
         // 1. client 개발자가 깜박할 수 있따.
