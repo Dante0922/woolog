@@ -2,6 +2,7 @@ package com.woolog.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,7 @@ public class Post {
     @Lob // java에서는 String으로 가지고 있지만 DB에는 Long으로 저장되도록
     private String content;
 
-
+    @Builder
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
