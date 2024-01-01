@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woolog.domain.Post;
 import com.woolog.repository.PostRepository;
 import com.woolog.request.PostCreate;
+import com.woolog.request.PostEdit;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -94,7 +95,6 @@ class PostControllerTest {
     @Test
     @DisplayName("/posts 요청시 DB에 값이 저장된다.")
     void test3() throws Exception {
-
         //given
         PostCreate request = PostCreate.builder()
                 .title("제목입니다")
@@ -116,8 +116,6 @@ class PostControllerTest {
 
         assertThat(post.getTitle()).isEqualTo("제목입니다");
         assertThat(post.getContent()).isEqualTo("내용입니다");
-
-
     }
 
     @Test
@@ -191,7 +189,97 @@ class PostControllerTest {
                 .andExpect(jsonPath("$[4].content").value("우로그 내용 26"))
                 .andDo(print());
     }
+    @Test
+    @DisplayName("게시글 수정")
+    void test7() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("이건우")
+                .content("성공하자!")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("이크림")
+                .content("hello")
+                .build();
 
 
+        //expected
+        mockMvc.perform(patch("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    @Test
+    @DisplayName("게시글 삭제")
+    void test8() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("이건우")
+                .content("성공하자!")
+                .build();
 
+        postRepository.save(post);
+
+
+        //expected
+        mockMvc.perform(delete("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 조회")
+    void test9() throws Exception{
+        mockMvc.perform(get("/posts/{postId}", 1L)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+    @Test
+    @DisplayName("존재하지 않는 게시글 수정")
+    void test10() throws Exception{
+
+        //given
+        PostEdit postEdit = PostEdit.builder()
+                .title("이크림")
+                .content("hello")
+                .build();
+
+
+        //expected
+        mockMvc.perform(patch("/posts/{postId}", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit))
+                )
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 제목에 '바보'는 포함될 수 없다")
+    void test11() throws Exception {
+        //given
+        PostCreate request = PostCreate.builder()
+                .title("나는 바보가 아니다")
+                .content("내용입니다")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        // when
+        mockMvc.perform(post("/posts")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
 }
+
+//

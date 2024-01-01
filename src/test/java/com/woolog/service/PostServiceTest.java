@@ -1,8 +1,10 @@
 package com.woolog.service;
 
 import com.woolog.domain.Post;
+import com.woolog.exception.PostNotFound;
 import com.woolog.repository.PostRepository;
 import com.woolog.request.PostCreate;
+import com.woolog.request.PostEdit;
 import com.woolog.request.PostSearch;
 import com.woolog.response.PostResponse;
 import org.assertj.core.api.Assertions;
@@ -105,5 +107,107 @@ class PostServiceTest {
         assertEquals(10L, posts.size());
         assertEquals("우로그 제목 30", posts.get(0).getTitle());
         assertEquals("우로그 내용 26", posts.get(4).getContent());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4() throws Exception {
+        //given
+
+
+        Post post = Post.builder()
+                .title("이건우")
+                .content("성공하자!")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("이크림")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id =" + post.getId()));
+        assertEquals("이크림",changedPost.getTitle());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test6() {
+        //given
+        Post post = Post.builder()
+                .title("이건우")
+                .content("성공하자!")
+                .build();
+
+        postRepository.save(post);
+
+        //when
+        postService.delete(post.getId());
+
+        //then
+        assertEquals(0, postRepository.count());
+    }
+    @Test
+    @DisplayName("글 단건 조회 실패")
+    void test7() throws Exception {
+        //given
+
+        Post post = Post.builder()
+                .title("아자아자")
+                .content("힘내자")
+                .build();
+        postRepository.save(post);
+
+        //expected
+         assertThrows(PostNotFound.class, () -> {
+            postService.get(post.getId() + 1L);
+        }, "예외처리가 잘못 되었습니다.");
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 실패")
+    void test8() {
+        //given
+        Post post = Post.builder()
+                .title("이건우")
+                .content("성공하자!")
+                .build();
+
+        postRepository.save(post);
+
+        //when
+        assertThrows(PostNotFound.class, () -> {
+            postService.delete(post.getId() + 1L);
+        }, "예외처리가 잘못 되었습니다.");
+    }
+
+    @Test
+    @DisplayName("글 제목 수정 실패")
+    void test9() throws Exception {
+        //given
+
+
+        Post post = Post.builder()
+                .title("이건우")
+                .content("성공하자!")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("이크림")
+                .build();
+
+        //when
+
+        assertThrows(PostNotFound.class, () -> {
+            postService.edit(post.getId() + 1L, postEdit);
+        }, "예외처리가 잘못 되었습니다.");
+
     }
 }

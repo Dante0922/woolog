@@ -1,7 +1,9 @@
 package com.woolog.controller;
 
 import com.woolog.domain.Post;
+import com.woolog.exception.InvalidRequest;
 import com.woolog.request.PostCreate;
+import com.woolog.request.PostEdit;
 import com.woolog.request.PostSearch;
 import com.woolog.response.PostResponse;
 import com.woolog.service.PostService;
@@ -34,19 +36,29 @@ public class PostController {
         2. Entity 응답
         3. PK 응답
         * */
+        request.validate();
         postService.write(request);
     }
 
     @GetMapping("/posts/{postId}")
-    public PostResponse get(@PathVariable Long postId){
+    public PostResponse get(@PathVariable Long postId) {
         return postService.get(postId);
     }
 
     @GetMapping("/posts")
-    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch)
-    {
+    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
         return postService.getList(postSearch);
     }
 
+    @PatchMapping("/posts/{postId}")
+    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        postService.edit(postId, request);
 
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public void delete(@PathVariable Long postId){
+        postService.delete(postId);
+
+    }
 }
