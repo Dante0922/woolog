@@ -46,7 +46,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청 시 Hello World를 출력한다")
+    @DisplayName("글 작성 요청 시 Hello world를 출력한다")
     void test() throws Exception {
 
         //given
@@ -60,7 +60,7 @@ class PostControllerTest {
 //        System.out.println(json);
 
         // expected
-        mockMvc.perform(post("/posts")
+        mockMvc.perform(post("/posts?authorization=hello")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -70,7 +70,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 title값은 필수다")
+    @DisplayName("글 작성 요청시 title값은 필수다")
     void test2() throws Exception {
 
         //given
@@ -93,7 +93,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 DB에 값이 저장된다.")
+    @DisplayName("글 작성 요청시 DB에 값이 저장된다.")
     void test3() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
@@ -106,6 +106,7 @@ class PostControllerTest {
 
         // when
         mockMvc.perform(post("/posts")
+                        .header("authorization", "woolog")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
