@@ -28,14 +28,23 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping("/test")
+    public String test(){
+        return "hello";
+    }
+
+    @GetMapping("/kali")
+    public String kali(){
+        return "kali";
+    }
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request, @RequestHeader String authorization) {
         /* 인증을 받는 방법
-         * 1. GET Parameter
-         * 2. POST(body) value <- 별로임
-         * 3. Header */
-        if (authorization.equals("woolog")) {
+        * 1. GET Parameter
+        * 2. POST(body) value <- 별로임
+        * 3. Header */
+        if(authorization.equals("woolog")){
             request.validate();
             postService.write(request);
         }
@@ -53,18 +62,13 @@ public class PostController {
     }
 
     @PatchMapping("/posts/{postId}")
-    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request, @RequestHeader String authorization) {
-        if (authorization.equals("woolog")) {
-            postService.edit(postId, request);
-        }
-
+    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        postService.edit(postId, request);
     }
 
     @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable Long postId, @RequestHeader String authorization) {
-        if (authorization.equals("woolog")) {
-            postService.delete(postId);
-        }
+    public void delete(@PathVariable Long postId){
+        postService.delete(postId);
 
     }
 }
