@@ -1,5 +1,6 @@
 package com.woolog.controller;
 
+import com.woolog.config.data.UserSession;
 import com.woolog.domain.Post;
 import com.woolog.exception.InvalidRequest;
 import com.woolog.request.PostCreate;
@@ -17,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.desktop.UserSessionEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,13 +30,11 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/test")
-    public String test(){
-        return "hello";
-    }
 
     @GetMapping("/kali")
-    public String kali(){
+    public String kali(UserSession userSession){
+        log.info(">>>>{}", userSession.name);
+
         return "kali";
     }
 
