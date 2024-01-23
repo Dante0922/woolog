@@ -33,7 +33,7 @@ public class PostController {
 
     @GetMapping("/kali")
     public String kali(UserSession userSession){
-        log.info(">>>>{}", userSession.name);
+        log.info(">>>>{}", userSession.id);
 
         return "kali";
     }
