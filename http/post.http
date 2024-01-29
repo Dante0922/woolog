@@ -2,4 +2,4 @@
 
 GET http://localhost:8080/kali
 Content-Type: application/json
-Authorization: helloo
+Authorization: 2
