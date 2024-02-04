@@ -11,4 +11,4 @@ Content-Type: application/json
 
 GET http://localhost:8080/kali
 Content-Type: application/json
-Cookie: d0914107-bc71-4335-aa8d-0ef17b1add0f
+Cookie: SESSION=a6c6ad2a-3862-46d1-957f-337129ad78b5
