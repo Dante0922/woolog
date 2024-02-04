@@ -1,10 +1,14 @@
-### 테스트 요청
-
+### 로그인 요청
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
   "email": "gw8413@gmail.com",
   "password": "1234"
-
 }
+
+### 인증 페이지 요청
+
+GET http://localhost:8080/kali
+Content-Type: application/json
+Cookie: d0914107-bc71-4335-aa8d-0ef17b1add0f

@@ -1,6 +1,7 @@
 package com.woolog.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.woolog.domain.Session;
 import com.woolog.domain.User;
 import com.woolog.repository.PostRepository;
 import com.woolog.repository.SessionRepository;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -104,7 +106,44 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken", Matchers.notNullValue()) )
                 .andDo(print());
-
-
     }
+
+    @Test
+    @DisplayName("로그인 후 권한이 필요한 페이지 접속")
+    void test4() throws Exception {
+
+        User user = User.builder()
+                .name("이건우")
+                .email("gw8413@gmail.com")
+                .password("1234")
+                .build();
+        Session session = user.addSession();
+        userRepository.save(user);
+        // expected
+        mockMvc.perform(get("/kali")
+                        .header("Authorization", session.getAccessToken())
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("로그인 시 검증되지 않은 세션값으로 요청 시 오류")
+    void test5() throws Exception {
+
+        User user = User.builder()
+                .name("이건우")
+                .email("gw8413@gmail.com")
+                .password("1234")
+                .build();
+        Session session = user.addSession();
+        userRepository.save(user);
+        // expected
+        mockMvc.perform(get("/kali")
+                        .header("Authorization", session.getAccessToken() + "-other")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
 }

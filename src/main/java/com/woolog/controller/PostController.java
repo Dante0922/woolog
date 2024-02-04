@@ -32,10 +32,10 @@ public class PostController {
 
 
     @GetMapping("/kali")
-    public String kali(UserSession userSession){
+    public Long kali(UserSession userSession){
         log.info(">>>>{}", userSession.id);
 
-        return "kali";
+        return userSession.id;
     }
 
     @PostMapping("/posts")
