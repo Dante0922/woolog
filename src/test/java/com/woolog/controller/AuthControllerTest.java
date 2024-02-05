@@ -8,6 +8,7 @@ import com.woolog.repository.SessionRepository;
 import com.woolog.repository.UserRepository;
 import com.woolog.request.Login;
 import com.woolog.request.PostCreate;
+import com.woolog.request.Signup;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -143,6 +144,23 @@ class AuthControllerTest {
                         .header("Authorization", session.getAccessToken() + "-other")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원가입")
+    void test6() throws Exception {
+
+        Signup woolog = Signup.builder()
+                .password("1234")
+                .email("gw8888@gmail.com")
+                .name("이건우")
+                .build();
+        // expected
+        mockMvc.perform(post("/auth/signup")
+                        .content(objectMapper.writeValueAsString(woolog))
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 

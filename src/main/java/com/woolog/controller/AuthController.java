@@ -2,6 +2,7 @@ package com.woolog.controller;
 
 import com.woolog.config.AppConfig;
 import com.woolog.request.Login;
+import com.woolog.request.Signup;
 import com.woolog.response.SessionResponse;
 import com.woolog.service.AuthService;
 import io.jsonwebtoken.Jwts;
@@ -26,6 +27,10 @@ public class AuthController {
     private final AuthService authService;
     private final AppConfig appConfig;
 
+    @PostMapping("/auth/signup")
+    public void signup(@RequestBody Signup signup){
+        authService.signup(signup);
+    }
 
     @PostMapping("/auth/login")
     public SessionResponse login(@RequestBody Login login) {
@@ -35,8 +40,6 @@ public class AuthController {
 //        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 //        byte[] encodedKey = key.getEncoded();
 //        String strKey = Base64.getEncoder().encodeToString(encodedKey);
-
-
 
         // key 디코딩
         SecretKey key = Keys.hmacShaKeyFor(appConfig.getJwtKey());
