@@ -49,7 +49,7 @@ public class AuthService {
             throw new AlreadyExistsEmailException();
         }
 
-        String encryptedPassword = passwordEncoder.encrpyt(signup.getPassword());
+        String encryptedPassword = passwordEncoder.encrypt(signup.getPassword());
 
 
         User user = User.builder()

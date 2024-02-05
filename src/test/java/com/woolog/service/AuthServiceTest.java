@@ -85,7 +85,7 @@ class AuthServiceTest {
     @DisplayName("로그인 성공")
     void test3() {
 
-        String encrpytedPassword = passwordEncoder.encrpyt("1234");
+        String encrpytedPassword = passwordEncoder.encrypt("1234");
         // given
         User userA = User.builder().email("gw8888@gmail.com")
                 .password(encrpytedPassword)
