@@ -1,8 +1,5 @@
 package com.woolog.controller;
 
-import com.woolog.config.data.UserSession;
-import com.woolog.domain.Post;
-import com.woolog.exception.InvalidRequest;
 import com.woolog.request.PostCreate;
 import com.woolog.request.PostEdit;
 import com.woolog.request.PostSearch;
@@ -11,17 +8,9 @@ import com.woolog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.desktop.UserSessionEvent;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -30,13 +19,6 @@ public class PostController {
 
     private final PostService postService;
 
-
-    @GetMapping("/kali")
-    public Long kali(UserSession userSession){
-        log.info(">>>>{}", userSession.id);
-
-        return userSession.id;
-    }
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request, @RequestHeader String authorization) {
