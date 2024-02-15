@@ -1,14 +1,12 @@
 package com.woolog.service;
 
-import com.woolog.crypto.PasswordEncoder;
 import com.woolog.domain.User;
 import com.woolog.exception.AlreadyExistsEmailException;
-import com.woolog.exception.InvalidSigninInformation;
 import com.woolog.repository.UserRepository;
 import com.woolog.request.Signup;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,6 +17,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     public void signup(Signup signup) {
 
         Optional<User> userOptional = userRepository.findByEmail(signup.getEmail());
@@ -27,7 +26,7 @@ public class AuthService {
             throw new AlreadyExistsEmailException();
         }
 
-        String encryptedPassword = passwordEncoder.encrypt(signup.getPassword());
+        String encryptedPassword = passwordEncoder.encode(signup.getPassword());
 
 
         User user = User.builder()
