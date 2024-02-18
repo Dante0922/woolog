@@ -1,7 +1,12 @@
 package com.woolog.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.woolog.config.handler.Http401Handler;
+import com.woolog.config.handler.Http403Handler;
+import com.woolog.config.handler.LoginFailHandler;
 import com.woolog.domain.User;
 import com.woolog.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,7 +35,10 @@ import java.util.Collection;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final ObjectMapper objectMapper;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -46,12 +54,12 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers("/auth/login" ).permitAll()
                                 .requestMatchers("/auth/signup" ).permitAll()
-                                .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
-//                                .requestMatchers("/admin").hasRole("ADMIN")
-                                .requestMatchers("/admin")
-                                    .access(new WebExpressionAuthorizationManager(
-                                        "hasRole('ADMIN') AND hasAuthority('WRITE')"
-                                ))
+                                .requestMatchers("/user").hasRole("USER")
+                                .requestMatchers("/admin").hasRole("ADMIN")
+//                                .requestMatchers("/admin")
+//                                    .access(new WebExpressionAuthorizationManager(
+//                                        "hasRole('ADMIN') AND hasAuthority('WRITE')"
+//                                ))
                                 .anyRequest().authenticated())
                 .formLogin(formLoginConfigurer -> {
                     formLoginConfigurer
@@ -59,7 +67,12 @@ public class SecurityConfig {
                             .loginProcessingUrl("/auth/login")
                             .usernameParameter("username")
                             .passwordParameter("password")
-                            .defaultSuccessUrl("/");
+                            .defaultSuccessUrl("/")
+                            .failureHandler(new LoginFailHandler(objectMapper));
+                })
+                .exceptionHandling(e-> {
+                    e.accessDeniedHandler(new Http403Handler(objectMapper));
+                    e.authenticationEntryPoint(new Http401Handler(objectMapper));
                 })
                 .rememberMe(rm-> rm
                         .rememberMeParameter("remember")
