@@ -11,12 +11,21 @@ Content-Type: application/json
 
 
 
-### 로그인 요청
+### 폼 로그인 요청
 POST http://localhost:8080/auth/login
 Content-Type: application/x-www-form-urlencoded
 
 username=gw8413@gmail.com&password=12345&remember=1
 
+
+### Json 로그인 요청
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "gw8413@gmail.com",
+  "password": "12345"
+}
 
 
 
