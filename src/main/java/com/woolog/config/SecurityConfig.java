@@ -5,6 +5,7 @@ import com.woolog.config.filter.EmailPasswordAuthFilter;
 import com.woolog.config.handler.Http401Handler;
 import com.woolog.config.handler.Http403Handler;
 import com.woolog.config.handler.LoginFailHandler;
+import com.woolog.config.handler.LoginSuccessHandler;
 import com.woolog.domain.User;
 import com.woolog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,15 +64,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/auth/login").permitAll()
-                                .requestMatchers("/auth/signup").permitAll()
+//                                .requestMatchers("/auth/login").permitAll()
+//                                .requestMatchers("/auth/signup").permitAll()
 //                                .requestMatchers("/user").hasRole("USER")
 //                                .requestMatchers("/admin").hasRole("ADMIN")
 //                                .requestMatchers("/admin")
 //                                    .access(new WebExpressionAuthorizationManager(
 //                                        "hasRole('ADMIN') AND hasAuthority('WRITE')"
 //                                ))
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
 //                .formLogin(formLoginConfigurer -> {
 //                    formLoginConfigurer
 //                            .loginPage("/auth/login")
@@ -112,7 +113,7 @@ public class SecurityConfig {
         EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/auth/login", objectMapper);
 
         filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/"));
+        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper));
         filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
 

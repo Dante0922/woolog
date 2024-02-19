@@ -26,8 +26,4 @@ public class AuthController {
         authService.signup(signup);
     }
 
-    @PostMapping("/auth/login")
-    public String login() {
-        return "로그인 페이지입니다.";
-    }
 }
