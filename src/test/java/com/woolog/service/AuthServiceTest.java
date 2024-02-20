@@ -21,8 +21,6 @@ class AuthServiceTest {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @AfterEach
     void clean() {

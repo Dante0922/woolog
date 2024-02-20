@@ -1,9 +1,12 @@
 package com.woolog.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.woolog.config.WoologMockUser;
 import com.woolog.domain.Post;
 import com.woolog.repository.PostRepository;
+import com.woolog.repository.UserRepository;
 import com.woolog.request.PostCreate;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +49,16 @@ public class PostControllerDocTest {
     @Autowired
     private PostRepository postRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private ObjectMapper  objectMapper;
+
+    @AfterEach
+    void clean() {
+        userRepository.deleteAll();
+        postRepository.deleteAll();
+    }
+
 
 //    @BeforeEach
 //    void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -82,6 +94,7 @@ public class PostControllerDocTest {
     }
 
     @Test
+    @WoologMockUser()
     @DisplayName("글 등록")
     void test2() throws Exception {
         //given

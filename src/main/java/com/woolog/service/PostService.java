@@ -2,8 +2,11 @@ package com.woolog.service;
 
 import com.woolog.domain.Post;
 import com.woolog.domain.PostEditor;
+import com.woolog.domain.User;
 import com.woolog.exception.PostNotFound;
+import com.woolog.exception.UserNotFound;
 import com.woolog.repository.PostRepository;
+import com.woolog.repository.UserRepository;
 import com.woolog.request.PostCreate;
 import com.woolog.request.PostEdit;
 import com.woolog.request.PostSearch;
@@ -26,12 +29,17 @@ public class PostService {
 
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public void write(PostCreate postCreate){
+    public void write(PostCreate postCreate, Long userId){
+
+        User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+
         //postCreate -> Entity 변환이 필요하다.
         Post post = Post.builder()
                 .title(postCreate.getTitle())
                 .content(postCreate.getContent())
+                .user(user)
                 .build();
         postRepository.save(post);
 

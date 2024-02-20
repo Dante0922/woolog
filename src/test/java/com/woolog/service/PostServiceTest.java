@@ -1,8 +1,10 @@
 package com.woolog.service;
 
 import com.woolog.domain.Post;
+import com.woolog.domain.User;
 import com.woolog.exception.PostNotFound;
 import com.woolog.repository.PostRepository;
+import com.woolog.repository.UserRepository;
 import com.woolog.request.PostCreate;
 import com.woolog.request.PostEdit;
 import com.woolog.request.PostSearch;
@@ -34,10 +36,14 @@ class PostServiceTest {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
 
     @BeforeEach
     void clean() {
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -49,8 +55,16 @@ class PostServiceTest {
                 .content("내용입니다")
                 .build();
 
+        User user = User.builder()
+                .name("크림")
+                .email("gw8413@gmail.com")
+                .password("12345")
+                .build();
+        userRepository.save(user);
+
         //when
-        postService.write(postCreate);
+
+        postService.write(postCreate, user.getId());
 
         //then
         assertThat(postCreate.getTitle()).isEqualTo("제목입니다");
@@ -132,7 +146,7 @@ class PostServiceTest {
         //then
         Post changedPost = postRepository.findById(post.getId())
                 .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id =" + post.getId()));
-        assertEquals("이크림",changedPost.getTitle());
+        assertEquals("이크림", changedPost.getTitle());
     }
 
     @Test
@@ -152,6 +166,7 @@ class PostServiceTest {
         //then
         assertEquals(0, postRepository.count());
     }
+
     @Test
     @DisplayName("글 단건 조회 실패")
     void test7() throws Exception {
@@ -164,7 +179,7 @@ class PostServiceTest {
         postRepository.save(post);
 
         //expected
-         assertThrows(PostNotFound.class, () -> {
+        assertThrows(PostNotFound.class, () -> {
             postService.get(post.getId() + 1L);
         }, "예외처리가 잘못 되었습니다.");
     }

@@ -1,5 +1,6 @@
 package com.woolog.controller;
 
+import com.woolog.config.UserPrincipal;
 import com.woolog.request.PostCreate;
 import com.woolog.request.PostEdit;
 import com.woolog.request.PostSearch;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,14 +25,14 @@ public class PostController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/posts")
-    public void post(@RequestBody @Valid PostCreate request) {
+    public void post(@RequestBody @Valid PostCreate request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         /* 인증을 받는 방법
         * 1. GET Parameter
         * 2. POST(body) value <- 별로임
         * 3. Header */
 
             request.validate();
-            postService.write(request);
+            postService.write(request, userPrincipal.getUserId());
 
 
     }
@@ -51,7 +53,8 @@ public class PostController {
         postService.edit(postId, request);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') && hasPermission(#postId, 'POST', 'DELETE')")
     @DeleteMapping("/posts/{postId}")
     public void delete(@PathVariable Long postId){
         postService.delete(postId);
