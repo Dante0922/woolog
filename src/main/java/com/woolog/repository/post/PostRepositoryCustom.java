@@ -1,7 +1,7 @@
-package com.woolog.repository;
+package com.woolog.repository.post;
 
 import com.woolog.domain.Post;
-import com.woolog.request.PostSearch;
+import com.woolog.request.post.PostSearch;
 
 import java.util.List;
 

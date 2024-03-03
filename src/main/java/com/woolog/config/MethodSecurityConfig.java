@@ -1,6 +1,6 @@
 package com.woolog.config;
 
-import com.woolog.repository.PostRepository;
+import com.woolog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

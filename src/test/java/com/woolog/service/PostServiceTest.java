@@ -3,21 +3,17 @@ package com.woolog.service;
 import com.woolog.domain.Post;
 import com.woolog.domain.User;
 import com.woolog.exception.PostNotFound;
-import com.woolog.repository.PostRepository;
+import com.woolog.repository.post.PostRepository;
 import com.woolog.repository.UserRepository;
-import com.woolog.request.PostCreate;
-import com.woolog.request.PostEdit;
-import com.woolog.request.PostSearch;
+import com.woolog.request.post.PostCreate;
+import com.woolog.request.post.PostEdit;
+import com.woolog.request.post.PostSearch;
 import com.woolog.response.PostResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +21,6 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.data.domain.Sort.Direction.*;
 
 @SpringBootTest
 class PostServiceTest {

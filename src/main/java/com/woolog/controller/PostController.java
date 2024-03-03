@@ -1,9 +1,9 @@
 package com.woolog.controller;
 
 import com.woolog.config.UserPrincipal;
-import com.woolog.request.PostCreate;
-import com.woolog.request.PostEdit;
-import com.woolog.request.PostSearch;
+import com.woolog.request.post.PostCreate;
+import com.woolog.request.post.PostEdit;
+import com.woolog.request.post.PostSearch;
 import com.woolog.response.PostResponse;
 import com.woolog.service.PostService;
 import jakarta.validation.Valid;

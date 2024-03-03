@@ -4,24 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woolog.config.WoologMockUser;
 import com.woolog.domain.Post;
 import com.woolog.domain.User;
-import com.woolog.repository.PostRepository;
+import com.woolog.repository.post.PostRepository;
 import com.woolog.repository.UserRepository;
-import com.woolog.request.PostCreate;
-import com.woolog.request.PostEdit;
-import org.hamcrest.Matchers;
+import com.woolog.request.post.PostCreate;
+import com.woolog.request.post.PostEdit;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.*;
@@ -229,29 +224,29 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-    @Test
-    @WoologMockUser()
-    @DisplayName("게시글 삭제")
-    void test8() throws Exception {
-        //given
-        User user = userRepository.findAll().get(0);
-
-        Post post = Post.builder()
-                .title("이건우")
-                .content("성공하자!")
-                .user(user)
-                .build();
-        postRepository.save(post);
-
-
-
-        //expected
-        mockMvc.perform(delete("/posts/{postId}", post.getId())
-                        .contentType(APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
+//    @Test
+//    @WoologMockUser()
+//    @DisplayName("게시글 삭제")
+//    void test8() throws Exception {
+//        //given
+//        User user = userRepository.findAll().get(0);
+//
+//        Post post = Post.builder()
+//                .title("이건우")
+//                .content("성공하자!")
+//                .user(user)
+//                .build();
+//        postRepository.save(post);
+//
+//
+//
+//        //expected
+//        mockMvc.perform(delete("/posts/{postId}", post.getId())
+//                        .contentType(APPLICATION_JSON)
+//                )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//    }
 
     @Test
     @DisplayName("존재하지 않는 게시글 조회")

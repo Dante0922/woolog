@@ -15,3 +15,21 @@
    4. 이런 걸로 암호화 하면 안 되는 이유
 3. BCrypt SCrypt, Argon2
    1. salt 값
+
+## 댓글의 API 구조
+
+게시글
+POST /posts
+GET /posts/{postId}
+
+댓글
+POST /comments?postId=1 
+POST /posts/{postId}/comments
+- 아래와 같은 경우가 생길 수도?
+POST /posts/{postId}/category/{categoryId}/comments
+
+
+DELETE /posts/{postId}/comments/{commentId}
+- 아래처럼 수정
+DELETE /comments/{commentId}
+PATCH /comments/{commentId}

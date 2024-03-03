@@ -1,21 +1,17 @@
 package com.woolog.service;
 
 import com.woolog.domain.Post;
-import com.woolog.domain.PostEditor;
 import com.woolog.domain.User;
 import com.woolog.exception.PostNotFound;
 import com.woolog.exception.UserNotFound;
-import com.woolog.repository.PostRepository;
+import com.woolog.repository.post.PostRepository;
 import com.woolog.repository.UserRepository;
-import com.woolog.request.PostCreate;
-import com.woolog.request.PostEdit;
-import com.woolog.request.PostSearch;
+import com.woolog.request.post.PostCreate;
+import com.woolog.request.post.PostEdit;
+import com.woolog.request.post.PostSearch;
 import com.woolog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

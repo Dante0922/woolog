@@ -2,10 +2,9 @@ package com.woolog.config;
 
 import com.woolog.domain.Post;
 import com.woolog.exception.PostNotFound;
-import com.woolog.repository.PostRepository;
+import com.woolog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 

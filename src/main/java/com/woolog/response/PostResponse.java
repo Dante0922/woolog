@@ -1,7 +1,6 @@
 package com.woolog.response;
 
 import com.woolog.domain.Post;
-import com.woolog.repository.PostRepository;
 import lombok.Builder;
 import lombok.Getter;
 

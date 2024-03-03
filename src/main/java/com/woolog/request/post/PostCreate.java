@@ -1,4 +1,4 @@
-package com.woolog.request;
+package com.woolog.request.post;
 
 import com.woolog.exception.InvalidRequest;
 import jakarta.validation.constraints.NotBlank;
